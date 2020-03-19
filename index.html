@@ -13,6 +13,9 @@
     var jqxhr = $.getJSON("index.json", function () {
             console.log("success");
         })
+      .fail(function () {
+            console.log("error");
+        });
 
 
 
