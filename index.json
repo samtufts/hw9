@@ -1,0 +1,120 @@
+{
+    
+   "song" : [
+
+       {
+            "Title": "Halo",
+            "Artists": [
+                "Beyoncé"
+            ],
+            "Genres": [
+                "Pop",
+                "Contemporary R&B"
+            ],
+            "Release Date": "2008"
+        },
+        
+        {
+            "Title": "You Need To Calm Down",
+            "Artists": [
+                "Taylor Swift"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release Date": "2019"
+        },
+
+        {
+            "Title": "bad guy",
+            "Artists": [
+                "Billie Eilish"
+            ],
+            "Genres": [
+                "Alternative/Indie"
+            ],
+            "Release Date": "2019"
+        },
+
+        {
+            "Title": "I Don't Care",
+            "Artists": [
+                "Justin Bieber",
+                "Ed Sheeran"
+            ],
+            "Genres": [
+                "Pop",
+            ],
+            "Release Date": "2019"
+        },
+
+        {
+            "Title": "Hello",
+            "Artists": [
+                "Adele"
+            ],
+            "Genres": [
+                "Pop",
+            ],
+            "Release Date": "2015"
+        },
+
+        {
+            "Title": "Love Me Like You Do",
+            "Artists": [
+                "Ellie Goulding"
+            ],
+            "Genres": [
+                "Eletropop"
+            ],
+            "Release Date": "2015"
+        },
+
+        {
+            "Title": "Waka Waka (This Time for Africa)",
+            "Artists": [
+                "Shakira"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release Date": "2010"
+        },
+
+        {
+            "Title": "Thrift Shop",
+            "Artists": [
+                "Macklemore",
+                "Ryan Lewis"
+            ],
+            "Genres": [
+                "Hip-Hop",
+                "Rap"
+            ],
+            "Release Date": "2012"
+        },
+
+        {
+            "Title": "Roar",
+            "Artists": [
+                "Katie Perry"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release Date": "2012"
+        },
+
+        {
+            "Title": "Closer",
+            "Artists": [
+                "The Chainsmokers"
+            ],
+            "Genres": [
+                "Pop",
+                "Dance/Electronic"
+            ],
+            "Release Date": "2016"
+        }
+    ]
+}
