@@ -5,34 +5,347 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song List JSON</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        td, th {
+            width: 200px;
+            height: 50px;
+            /* padding-left: 20px; */
+            text-align: center;
+        }
+
+        input, select {
+            border: 2px solid rgba(47, 0, 255, 0.904);
+            border-radius: 0px;
+            margin-bottom: 10px;
+        }
+
+    </style>
 </head>
 
 <body>
 <script language="javascript">
 
-    var jqxhr = $.getJSON("index.json", function () {
-            console.log("success");
-        })
-      .fail(function () {
-            console.log("error");
+var songs = [
+
+       {
+            "Title": "Halo",
+            "Artists": [
+                "Beyoncé"
+            ],
+            "Genres": [
+                "Pop",
+                "R&B"
+            ],
+            "Release_Date": "2008"
+        },
+
+        {
+            "Title": "You Need To Calm Down",
+            "Artists": [
+                "Taylor Swift"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release_Date": "2019"
+        },
+
+        {
+            "Title": "bad guy",
+            "Artists": [
+                "Billie Eilish"
+            ],
+            "Genres": [
+                "Alternative/Indie"
+            ],
+            "Release_Date": "2019"
+        },
+
+        {
+            "Title": "I Don't Care",
+            "Artists": [
+                "Justin Bieber",
+                "Ed Sheeran"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release_Date": "2019"
+        },
+
+        {
+            "Title": "Hello",
+            "Artists": [
+                "Adele"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release_Date": "2015"
+        },
+
+        {
+            "Title": "Love Me Like You Do",
+            "Artists": [
+                "Ellie Goulding"
+            ],
+            "Genres": [
+                "Eletropop"
+            ],
+            "Release_Date": "2015"
+        },
+
+        {
+            "Title": "Waka Waka (This Time for Africa)",
+            "Artists": [
+                "Shakira"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release_Date": "2010"
+        },
+
+        {
+            "Title": "Thrift Shop",
+            "Artists": [
+                "Macklemore",
+                "Ryan Lewis"
+            ],
+            "Genres": [
+                "Hip-Hop",
+                "Rap"
+            ],
+            "Release_Date": "2012"
+        },
+
+        {
+            "Title": "Roar",
+            "Artists": [
+                "Katie Perry"
+            ],
+            "Genres": [
+                "Pop"
+            ],
+            "Release_Date": "2012"
+        },
+
+        {
+            "Title": "Closer",
+            "Artists": [
+                "The Chainsmokers"
+            ],
+            "Genres": [
+                "Pop",
+                "Dance/Electronic"
+            ],
+            "Release_Date": "2016"
+        },
+
+    ]
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    // Part 2: serialize and display on pageload
+    var string_display = JSON.stringify(songs);
+
+    $(document).ready(
+        function () {
+            $('#display_serialized').html(string_display);
+        }
+    );
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    // Part 3: user friendly display on pageload
+    $(document).ready(updateTable(songs, "#defaultTable"));
+
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+    
+    // Second approach for user friendly display on pageload
+    function showAll() {
+        var text = "";
+
+        //loop through each object in the JSON array
+        $.each(songs, function(key, value) {            
+            //add each object property to the string
+            text += "<b>Title: </b>" + value.Title + "</br>" + 
+                    "<b>Artists: </b>" + value.Artists.join(", ") + "</br>" +
+                    "<b>Genres: </b>" + value.Genres.join(", ") + "</br>" +
+                    "<b>Release Date: </b>" + value.Release_Date + "</br></br></br>";
         });
 
-
-
-//    $.getJSON("ajax/test.json", function (data) {
-//         var items = [];
-//         $.each(data, function (key, val) {
-//             items.push("<li id='" + key + "'>" + val + "</li>");
-//         });
-
-//         $("<ul/>", {
-//             "class": "my-new-list",
-//             html: items.join("")
-//         }).appendTo("body");
-//     }); 
+        $("#display").html(text)
+    }
     
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    // Part 4: Filter data by genres 
+    var genres_array = [];
+    var dropdown = "<select name='genres' id='genres'>";
+    var selected_genre;
+
+    $(document).ready(
+        function () {
+            $.each(songs, function () {
+                // get the genres of each song and add them to an array
+                $.each(this.Genres, function (name, value) {
+                    // only add genre to array if not already in it
+                    if ($.inArray(value, genres_array) == -1) {
+                        genres_array.push(value);
+                    }
+                });
+            });
+
+            // sort the array of genres
+            genres_array.sort();
+
+            // create dropdown of genres using sorted array
+                // start with dummy option
+                dropdown += "<option value= 'select a genre'> select a genre </option>";
+
+                // add an "all genres" to view all genres
+                dropdown += "<option value= 'all genres'> all genres </option>";
+
+                $.each(genres_array, function(key, value) {
+                    dropdown += "<option value=" + value + ">" + value + "</option>";
+                })
+
+                // close the select tag
+                dropdown += "</select>";
+            
+                // add the dropdown as an HTML string
+                $('#selector').html(dropdown);
+        }
+    );
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
     
+    // get the selected genre from the dropdown
+    $(document).ready(
+        function() {
+            $("#genres").change(function() {
+                selected_genre = $(this).children("option:selected").val();
+                console.log("You have selected: " + selected_genre);
+            })
+        }
+    );
+    
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * // 
+    
+    function updateTable(array, tableID) {
+        console.log("inside updateTable function", tableID);
+ 
+        //Update the table with selected items
+        // container = $("#songsTable").find("tbody");
+        container = $(tableID).find("tbody");
+
+        container.empty();
+
+        for (i = 0; i < array.length; i++) {
+            console.log(array[i].Title);
+            console.log(array[i].Artists.join(", "));
+            console.log(array[i].Genres.join(", "), array[i].Release_Date);
+            
+            container.append("<tr><td>" + array[i].Title +
+                "</td><td>" + array[i].Artists.join(", ") +
+                "</td><td>" + array[i].Genres.join(", ") +
+                "</td><td>" + array[i].Release_Date +
+                "</td></tr>");
+        }
+    };
+   
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+    
+    function filter(selected_genre) {
+        console.log("inside filter function; selection: " + selected_genre);
+
+        //Get the songs that match the dropdown selection
+        var genres_filtered = [];
+               
+        genres_filtered =   jQuery.grep(songs, function (song, i) {
+                                for (i = 0; i < song.Genres.length; i++) {
+                                    if (song.Genres[i] == selected_genre) {
+                                        return song.Genres[i] == selected_genre;
+                                    }   
+                                }
+
+                                //return every song if the selected genre is "all genres"
+                                if (selected_genre == "all genres") {
+                                    return song;
+                                }
+                            });
+
+        //Pass the array of filtered objects to the updateTable function
+        updateTable(genres_filtered, "#songsTable");
+                            
+        return false;
+    }
+
 </script>
-</body>
 
+<!-- * * * * * * * * * * * * * * * * * HTML CODE * * * * * * * * * * * * * * * * * * * * * * * * * * *  -->
+
+<div id="display_serialized"> </div>
+
+</br> </br>
+
+<div id = "display">
+    <script language="javascript">
+        // showAll();
+    </script>
+</div>
+
+<h2>All Songs, No Filter</h2>
+<table id="defaultTable" border="1" cellpadding="2" cellspacing="2">
+    <thead>
+        <tr>
+            <th>Song Title</th>
+            <th>Artists</th>
+            <th>Genres</th>
+            <th>Year Released</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+ 
+<script language="javascript">  
+    $(document).ready(updateTable(songs, "#defaultTable"));
+</script>
+
+<br> <br>
+
+<h2>Filterable Table</h2>
+
+<form onsubmit="return filter(selected_genre)">
+    <div id="selector"> </div>
+    <input type="submit" value="Filter">
+    </br> </br>
+</form>
+<table id="songsTable" border="1" cellpadding="2" cellspacing="2">
+    <thead>
+        <tr>
+            <th>Song Title</th>
+            <th>Artists</th>
+            <th>Genres</th>
+            <th>Year Released</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</body>
 </html>
